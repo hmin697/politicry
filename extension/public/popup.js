@@ -28,25 +28,23 @@ globalSwitch.onclick = globalSwitchHandler;
 /********** Keywords **********/
 
 // keywords data
-const allowedWordsData = [
+var allowedWordsData = [
     "ukraine",
     "blm",
     "gas prices"
 ];
 
-const blockedWordsData = [
+var blockedWordsData = [
     "trump",
-    "terrorist",
-    "communism",
-    "racism",
-    "isis",
-    "pizza"
+    "terrorist"
 ];
 
 //keywords cookie
 const cookieName = "PolityCry";
-var cookieList = getCookie(cookieName);
-
+//initialize cookie ( debug )
+//setCookie(cookieName,blockedWordsData,365);
+blockedWordsData = getCookie(cookieName);
+console.log(blockedWordsData[0]);
 ////set cookie
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
@@ -55,26 +53,20 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 };
 
-////stores cookie in cookielist;
+////get cookie;
 function getCookie(cname) {
 let name = cname + "=";
 let decodedCookie = decodeURIComponent(document.cookie);
-let ca = decodedCookie.split(';');
-for(let i = 0; i <ca.length; i++) {
-  let c = ca[i];
-  while (c.charAt(0) == ' ') {
-    c = c.substring(1);
-  }
-  if (c.indexOf(name) == 0) {
-    return c.substring(name.length, c.length);
-  }
-}
+let ca = decodedCookie.split(',');
+ca[0] = ca[0].substring(name.length);
+return ca;
 };
 
 // UI references
 const allowedBtn = document.getElementById("allowedBtn");
 const blockedBtn = document.getElementById("blockedBtn");
 const tagList = document.getElementById("tagList");
+const editTextField = document.getElementById("editTextField");
 const manageTagListBtn = document.getElementById("manageTagListBtn");
 
 // Helper:
@@ -123,8 +115,30 @@ const blockedBtnHandler = () => {
     renderBlockedWords();
 }
 
+var isEdit = false;
+
+//Mehtod:
+const manageTagListBtnHandler = () => {
+    if(!isEdit){
+        isEdit = true;
+        manageTagListBtn.innerHTML = "Add" + manageTagListBtn.innerHTML.substring(4);
+        editTextField.style.opacity = "100%"
+    }else{
+        isEdit = false;
+        manageTagListBtn.innerHTML = "Edit" + manageTagListBtn.innerHTML.substring(3);
+        editTextField.style.opacity = "0%"
+        const add = editTextField.value;
+        //currently new item is just appended to cookie
+        //new item needs validation.
+        blockedWordsData.push(add);
+        setCookie(cookieName,blockedWordsData,365);
+        
+    }
+}
+
 // assign buttons their respective functions
 allowedBtn.onclick = allowedBtnHandler;
 blockedBtn.onclick = blockedBtnHandler;
+manageTagListBtn.onclick = manageTagListBtnHandler;
 
 allowedBtnHandler();

@@ -264,10 +264,26 @@ header {
     background-color: rgba(255, 255, 255, 0);
 }
 
-.keywords .manage-tag-list-btn {
+.keywords .manage-tag-list  {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 26px;
+
+}
+
+.keywords .manage-tag-list input {
+    position: absolute;
+    bottom: 56px;
+    width: 135px;
+    height: 22px;
+
+    opacity: 0%;
+    background-color: white;
+
+    text-align: center;
+}
+
+.keywords .manage-tag-list-btn {
 
     width: 140px;
     height: 40px;
